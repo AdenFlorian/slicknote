@@ -1,0 +1,32 @@
+# Include your project-specific ignores in this file
+# Read about how to use .gitignore: https://help.github.com/articles/ignoring-files
+#Laravel
+/bootstrap/compiled.php
+/public/packages
+/vendor
+#.env.*.php
+.env.php
+
+# Composer
+composer.phar
+composer.lock
+
+# SASS & bourbon mixin
+.sass-cache/
+app/sass/bourbon/
+#public/css/app.css
+
+# phpstorm
+.idea/workspace.xml
+.idea/tasks.xml
+
+# Vagrant
+/.vagrant
+
+# Sublime Text
+*.sublime-*
+
+# Other
+.DS_Store
+Thumbs.db
+

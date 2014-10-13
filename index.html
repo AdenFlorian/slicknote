@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>SlickNote</title>
+	<meta name="description" content="Take notes in your browser">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/main.css">
+	<script src="js/vendor/jquery-1.10.2.min.js"></script>
+	<script src="js/main.js"></script>
+</head>
+<body>
+	<!--<div id="header">SlickNote</div>
+	<div id="sidebar">
+		<div class="note-side">First Note</div>
+		<div class="note-side">Second Note</div>
+		<div class="note-side">Third Note</div>
+	</div>
+	<div id="note-container">
+		<input type="text" class="note-title" title="Note Title" value="My First Title">
+		<textarea class="note-body" title="Note Body">
+			Write your notes here...
+		</textarea>
+	</div>-->
+	<table>
+		<tr id="header">
+			<td>SlickNote</td>
+		</tr>
+		<tr id="notes-row">
+			<td id="sidebar">
+				<div id="sidenotes"></div>
+				<div id="template-sidenote" class="side-note" style="display: none"></div>
+				<input id="newnotebutton" type="button" value="+New Note"/>
+			</td>
+			<td id="note-container">
+				<input type="hidden" id="note-id">
+				<input type="text" id="note-title" title="Note Title">
+				<textarea id="note-body" title="Note Body"></textarea>
+			</td>
+		</tr>
+		<tr id="footer-row">
+			<td></td>
+		</tr>
+	</table>
+</body>
+</html>
