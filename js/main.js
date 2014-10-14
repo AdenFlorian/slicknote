@@ -1,35 +1,16 @@
+var nextNoteID = 0;
+
 $(function () {
     AssignHandlers();
 
+    // Clear storage
+    //localStorage.clear();
+
     // Create seed notes in storage
-    localStorage.notes = JSON.stringify({
-                                            '0': {
-                                                'title': 'First Note',
-                                                'body': 'First note text...'
-                                            },
-                                            '1': {
-                                                'title': 'Second Note',
-                                                'body': 'Second note text...'
-                                            },
-                                            '2': {
-                                                'title': 'Third Note',
-                                                'body': 'Third note text...'
-                                            }
-                                        });
+    //SeedNotes(3);
 
     // Load notes from storage
-    var notes = JSON.parse(localStorage.notes);
-
-    if (notes[0].title.length < 1) {
-        console.log('error loading notes');
-    }
-
-    for (var note in notes) {
-        // Create sidenote
-        if (notes.hasOwnProperty(note)) {
-            CreateSideNote(note, notes[note].title);
-        }
-    }
+    LoadStoredNotes();
 });
 
 function AssignHandlers() {
@@ -38,6 +19,28 @@ function AssignHandlers() {
     });
     $('.side-note').click(SideNoteClick);
     $('#note-body').keyup(NoteChanged);
+    $('#note-title').keyup(NoteChanged);
+    $('#newnotebutton').click(NewNote);
+}
+
+function LoadStoredNotes() {
+    var notes = {};
+
+    for (var i = 0; i < localStorage.length; i++) {
+        notes[i] = JSON.parse(localStorage.getItem(localStorage.key(i)));
+    }
+
+    console.log(notes[0].title);
+
+    for (var note in notes) {
+        // Create sidenote
+        if (notes.hasOwnProperty(note)) {
+            CreateSideNote(notes[note].id, notes[note].title);
+            if (notes[note].id >= nextNoteID) {
+                nextNoteID = notes[note].id + 1;
+            }
+        }
+    }
 }
 
 function CreateSideNote(id, title) {
@@ -61,7 +64,7 @@ function SideNoteClick() {
 
 function LoadNote(id) {
     console.log('loading note ' + id);
-    var note = JSON.parse(localStorage.notes)[id];
+    var note = JSON.parse(localStorage.getItem('note-' + id));
     $('#note-title').val(note.title);
     $('#note-body').val(note.body);
     $('#note-id').val(id);
@@ -72,10 +75,17 @@ function SaveCurrentNote() {
     console.log('saving note ' + id);
     var headertd = $('#header').find('td');
     headertd.text('Saving...');
-    var notes = JSON.parse(localStorage.notes);
-    notes[id].title = $('#note-title').val();
-    notes[id].body = $('#note-body').val();
-    localStorage.notes = JSON.stringify(notes);
+
+    // Save to localStorage
+    var note = {
+        'id': id,
+        'title': $('#note-title').val(),
+        'body': $('#note-body').val()
+    };
+    localStorage.setItem('note-' + id, JSON.stringify(note));
+    // Update sidenote
+    $('#note-' + id).text(note.title);
+
     headertd.text('Saved!');
     console.log('Note ' + id + ' was saved!');
 }
@@ -93,9 +103,29 @@ function NoteChanged() {
 }
 
 function NewNoteButton() {
-    CreateSideNote()
+    NewNote();
 }
 
 function NewNote() {
+    var newID = nextNoteID++;
+    var note = {
+        'id': newID,
+        'title': 'Note ' + newID,
+        'body': 'Text of note number ' + newID
+    };
+    localStorage.setItem('note-' + newID, JSON.stringify(note));
+    CreateSideNote(newID, note.title);
+}
 
+// Create seed notes
+function SeedNotes(amount) {
+    for (var i = 0; i < amount; i++) {
+        var note = {
+            'id': i,
+            'title': 'Note ' + i,
+            'body': 'Text of note number ' + i
+        };
+        localStorage.setItem('note-' + i, JSON.stringify(note));
+        nextNoteID++;
+    }
 }
