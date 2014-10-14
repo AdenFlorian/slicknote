@@ -2,20 +2,20 @@ $(function () {
     AssignHandlers();
 
     // Create seed notes in storage
-    /*localStorage.notes = JSON.stringify({
-     '0': {
-     'title': 'First Note',
-     'body': 'First note text...'
-     },
-     '1': {
-     'title': 'Second Note',
-     'body': 'Second note text...'
-     },
-     '2': {
-     'title': 'Third Note',
-     'body': 'Third note text...'
-     }
-     });*/
+    localStorage.notes = JSON.stringify({
+                                            '0': {
+                                                'title': 'First Note',
+                                                'body': 'First note text...'
+                                            },
+                                            '1': {
+                                                'title': 'Second Note',
+                                                'body': 'Second note text...'
+                                            },
+                                            '2': {
+                                                'title': 'Third Note',
+                                                'body': 'Third note text...'
+                                            }
+                                        });
 
     // Load notes from storage
     var notes = JSON.parse(localStorage.notes);
