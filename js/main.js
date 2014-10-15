@@ -1,27 +1,42 @@
 var nextNoteID = 0;
 
 $(document).ready(function () {
+    $('#summernote').summernote({
+                                    height: '400', // set editor height
+                                    minHeight: null, // set minimum height of editor
+                                    maxHeight: null, // set maximum height of editor
+                                    focus: true, // set focus to editable area after initializing summernote
+                                    onkeyup: function (e) {
+                                        NoteChanged();
+                                    },
+                                    onChange: function (contents, $editable) {
+                                        NoteChanged();
+                                    }
+                                });
     AssignHandlers();
 
     var loadedCount = LoadStoredNotes();
 
     if (loadedCount === 0) {
-        CreateIntroNote();
+        NewNote();
     }
-});
+
+    ClickFirstSideNote();
+})
+;
 
 function AssignHandlers() {
     $('.note-title').focus(function () {
         $(this).select();
     });
     $('.side-note').click(SideNoteClick);
-    $('#note-body').keyup(NoteChanged);
+    //$('#summernote').keyup(NoteChanged);
     $('#note-title').keyup(NoteChanged);
     $('#newnotebutton').click(NewNote);
 }
 
-function CreateIntroNote() {
-    NewNote();
+function ClickFirstSideNote() {
+    $('#sidenotes').children(':first-child').click();
 }
 
 /**
@@ -75,7 +90,7 @@ function LoadNote(id) {
     console.log('loading note ' + id);
     var note = JSON.parse(localStorage.getItem('note-' + id));
     $('#note-title').val(note.title);
-    $('#note-body').val(note.body);
+    $('#summernote').code(note.body);
     $('#note-id').val(id);
 }
 
@@ -89,7 +104,7 @@ function SaveCurrentNote() {
     var note = {
         'id': id,
         'title': $('#note-title').val(),
-        'body': $('#note-body').val()
+        'body': $('#summernote').code()
     };
     localStorage.setItem('note-' + id, JSON.stringify(note));
     // Update sidenote
@@ -106,9 +121,9 @@ function NoteChanged() {
     clearTimeout(timeoutID);
     var noteID = $('#note-id').val();
     console.log('changing note ' + noteID);
-    timeoutID = window.setTimeout(function (noteID) {
+    timeoutID = window.setTimeout(function () {
         SaveCurrentNote();
-    }(noteID), timeout);
+    }, timeout);
 }
 
 function NewNote() {
@@ -120,11 +135,4 @@ function NewNote() {
     };
     localStorage.setItem('note-' + newID, JSON.stringify(note));
     CreateSideNote(newID, note.title);
-}
-
-// Create seed notes
-function SeedNotes(amount) {
-    for (var i = 0; i < amount; i++) {
-        NewNote();
-    }
 }
