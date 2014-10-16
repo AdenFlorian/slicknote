@@ -7,13 +7,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="css/reset.css">
 	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="css/main.css">
 	<script src="js/vendor/jquery-1.10.2.min.js"></script>
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
 	<link href="css/vendor/summernote.css" rel="stylesheet">
 	<script src="js/vendor/summernote.min.js"></script>
 	<script src="js/main.js"></script>
+	<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 	<table>
@@ -27,15 +27,24 @@
 				<input id="newnotebutton" type="button" value="+New Note"/>
 			</td>
 			<td id="note-container">
-				<input type="hidden" id="note-id">
-				<input type="text" id="note-title" title="Note Title">
-				<!--<textarea id="note-body" title="Note Body"></textarea>-->
-				<div id="summernote">Summernote goes here...</div>
+				<table>
+					<tr style="height: 50px">
+						<td><input type="hidden" id="note-id">
+							<input type="text" id="note-title" title="Note Title"></td>
+					</tr>
+					<tr>
+						<!--<textarea id="note-body" title="Note Body"></textarea>-->
+						<td>
+							<div id="summernote">Summernote goes here...</div>
+						</td>
+					</tr>
+				</table>
 			</td>
 		</tr>
-		<tr id="footer-row">
-			<td></td>
-		</tr>
+		<!--
+				<tr id="footer-row">
+					<td>footer</td>
+				</tr>-->
 	</table>
 </body>
 </html>

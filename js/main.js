@@ -2,13 +2,10 @@ var nextNoteID = 0;
 
 $(document).ready(function () {
     $('#summernote').summernote({
-                                    height: '400', // set editor height
+                                    //height: '400', // set editor height
                                     minHeight: null, // set minimum height of editor
                                     maxHeight: null, // set maximum height of editor
                                     focus: true, // set focus to editable area after initializing summernote
-                                    onkeyup: function (e) {
-                                        NoteChanged();
-                                    },
                                     onChange: function (contents, $editable) {
                                         NoteChanged();
                                     }
