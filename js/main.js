@@ -19,6 +19,19 @@ $(document).ready(function () {
     }
 
     ClickFirstSideNote();
+
+    // Setup keybinds
+    $(document).keydown(function (event) {
+        switch (event.which) {
+            case 46:    // Delete
+                OnDeleteKey();
+                break;
+            default:
+                break;
+        }
+        // Stop letter from being typed into new input box if applicable
+        //event.preventDefault();
+    });
 })
 ;
 
@@ -32,6 +45,13 @@ function AssignHandlers() {
     $('#newnotebutton').click(NewNote);
 }
 
+function OnDeleteKey() {
+    var $sidenote = $('.side-note:focus');
+    if ($sidenote.attr('id')) {
+        DeleteNote($sidenote.attr('id').replace(/note-/, ''));
+    }
+}
+
 function ClickFirstSideNote() {
     $('#sidenotes').children(':first-child').click();
 }
@@ -41,21 +61,22 @@ function ClickFirstSideNote() {
  * @return {number} loadedCount - Number of notes loaded
  */
 function LoadStoredNotes() {
-    var notes = {};
+    var items = {};
     var loadedCount = 0;
 
     for (var i = 0; i < localStorage.length; i++) {
-        notes[i] = JSON.parse(localStorage.getItem(localStorage.key(i)));
+        try {
+            items[i] = JSON.parse(localStorage.getItem(localStorage.key(i)));
+        }
+        catch (e) {
+        }
     }
 
-    console.log(notes[0].title);
-
-    for (var note in notes) {
-        // Create sidenote
-        if (notes.hasOwnProperty(note)) {
-            CreateSideNote(notes[note].id, notes[note].title);
-            if (notes[note].id >= nextNoteID) {
-                nextNoteID = notes[note].id + 1;
+    for (var item in items) {
+        if (items.hasOwnProperty(item) && items[item].title) {
+            CreateSideNote(items[item].id, items[item].title);
+            if (items[item].id >= nextNoteID) {
+                nextNoteID = items[item].id + 1;
             }
             loadedCount++;
         }
@@ -83,6 +104,18 @@ function SideNoteClick() {
     $(this).addClass('selected');
 }
 
+function DeleteNote(id) {
+    localStorage.removeItem('note-' + id);
+    $('#note-' + id).remove();
+    ClearEditor();
+}
+
+function ClearEditor() {
+    $('#note-title').val('');
+    $('#summernote').code('');
+    $('#note-id').val('');
+}
+
 function LoadNote(id) {
     console.log('loading note ' + id);
     var note = JSON.parse(localStorage.getItem('note-' + id));
@@ -93,7 +126,7 @@ function LoadNote(id) {
 
 function SaveCurrentNote() {
     var id = $('#note-id').val();
-    console.log('saving note ' + id);
+    //console.log('saving note ' + id);
     var headertd = $('#header').find('td');
     headertd.text('Saving...');
 
@@ -108,7 +141,7 @@ function SaveCurrentNote() {
     $('#note-' + id).text(note.title);
 
     headertd.text('Saved!');
-    console.log('Note ' + id + ' was saved!');
+    //console.log('Note ' + id + ' was saved!');
 }
 
 var timeout = 500;
@@ -117,7 +150,7 @@ var timeoutID;
 function NoteChanged() {
     clearTimeout(timeoutID);
     var noteID = $('#note-id').val();
-    console.log('changing note ' + noteID);
+    //console.log('changing note ' + noteID);
     timeoutID = window.setTimeout(function () {
         SaveCurrentNote();
     }, timeout);
